@@ -20,12 +20,8 @@ def step_given_call_webservice(context, url):
     context.response = requests.get(url)
     context.response_data = json.loads(context.response.text)
 
-@then('la réponse doit contenir une structure JSON similaire à celle-ci')
-def step_then_response_should_contain_similar_structure(context):
-    expected_structure = json.loads(context.text)
+@then('la clé "{key}" de la réponse doit être égale à {value}')
+def step_then_response_key_should_equal(context, key, value):
     response_data = context.response_data
-
-    for key in expected_structure:
-        assert key in response_data, f"La clé '{key}' est manquante dans la réponse JSON."
-
-    # Si toutes les clés sont présentes, le test réussit
+    assert key in response_data, f"La clé '{key}' est manquante dans la réponse JSON."
+    assert response_data[key] == int(value), f"La valeur de la clé '{key}' n'est pas égale à {value}."
